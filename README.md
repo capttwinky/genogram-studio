@@ -1,5 +1,7 @@
 # Genogram Studio
 
+[![Deploy to GitHub Pages](https://github.com/capttwinky/genogram-studio/actions/workflows/deploy.yml/badge.svg)](https://github.com/capttwinky/genogram-studio/actions/workflows/deploy.yml)
+
 A single-page React app for creating and rendering genogram-style family and system diagrams from JSON embedded in Markdown.
 
 The app extracts a fenced `genogram-json` block from Markdown, validates it with Zod, normalizes references into an internal graph model, computes a deterministic SVG layout, and renders an interactive diagram with D3.
@@ -119,7 +121,7 @@ src/
 
 ## GitHub Pages Deployment
 
-This project uses GitHub Pages Actions. It does not use a `gh-pages` branch, and `dist/` should stay uncommitted.
+This project uses GitHub Pages Actions to build the Vite app and publish the generated `dist/` artifact. It is not a Jekyll project, it does not use the "Static HTML without build" workflow, it does not use a `gh-pages` branch, and `dist/` should stay uncommitted.
 
 ### Enable GitHub Pages
 
@@ -140,6 +142,7 @@ The workflow at `.github/workflows/deploy.yml`:
 - builds with `npm run build`
 - uploads `dist/` as a GitHub Pages artifact
 - deploys with `actions/deploy-pages`
+- includes `public/.nojekyll` so GitHub Pages does not run Jekyll processing
 - uses only these permissions: `contents: read`, `pages: write`, `id-token: write`
 
 ### Base Path
@@ -158,10 +161,10 @@ For a user or organization root page, such as `https://USERNAME.github.io/`, use
 VITE_BASE_PATH=/ npm run build
 ```
 
-For a project page, such as `https://USERNAME.github.io/REPO/`, use:
+For this repository's project page, `https://USERNAME.github.io/genogram-studio/`, the base path should be:
 
 ```bash
-VITE_BASE_PATH=/REPO/ npm run build
+VITE_BASE_PATH=/genogram-studio/ npm run build
 ```
 
-The deploy workflow defaults `VITE_BASE_PATH` to `/${{ github.event.repository.name }}/`, which is the correct path for a project page. To override it, add a repository variable named `VITE_BASE_PATH` in **Settings > Secrets and variables > Actions > Variables**. Set it to `/` for a user or organization root page.
+The deploy workflow defaults `VITE_BASE_PATH` to `/${repo-name}/`, which resolves to `/genogram-studio/` for this repository. To override it, add a repository variable named `VITE_BASE_PATH` in **Settings > Secrets and variables > Actions > Variables**. Set it to `/` for a user or organization root page.
