@@ -1,18 +1,16 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import type { NormalizedGenogram } from "../domain/normalize";
-import { computeDiagramLayout, type LayoutLink, type LayoutPerson, type LayoutUnion } from "../diagram/layout";
+import type { LayoutLink, LayoutPerson, LayoutResult, LayoutUnion } from "../diagram/layout";
 
 type Props = {
-  graph: NormalizedGenogram;
+  layout: LayoutResult;
 };
 
 const PERSON_W = 112;
 const PERSON_H = 84;
 
-export function GenogramSvg({ graph }: Props) {
+export function GenogramSvg({ layout }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const layout = useMemo(() => computeDiagramLayout(graph), [graph]);
 
   useEffect(() => {
     const svgEl = svgRef.current;

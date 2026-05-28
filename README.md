@@ -74,6 +74,8 @@ Paste Markdown that contains a fenced JSON block:
 
 If no `genogram-json` or `json` fence is found, the app attempts to parse the full editor contents as JSON.
 
+For the complete JSON-in-Markdown schema and examples, see [gstu Markup Reference](docs/gstu-markup-reference.md).
+
 ## Supported Data
 
 The current schema supports:
@@ -84,6 +86,7 @@ The current schema supports:
 - `emotionalRelationships`
 - `roles`
 - `roleAssignments`
+- `layoutHints`
 
 Validation catches malformed JSON, schema errors, duplicate ids, and references to missing people, unions, or roles.
 

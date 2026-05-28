@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { GenogramSvg } from "./components/GenogramSvg";
+import { computeDiagramLayout } from "./diagram/layout";
 import { parseMarkdownGenogram } from "./domain/parse";
 import { sampleMarkdown } from "./sample";
 
@@ -13,6 +14,7 @@ export function App() {
   const [markdown, setMarkdown] = useState(readInitialMarkdown);
   const [editorOpen, setEditorOpen] = useState(true);
   const result = useMemo(() => parseMarkdownGenogram(markdown), [markdown]);
+  const layout = useMemo(() => (result.ok ? computeDiagramLayout(result.graph) : undefined), [result]);
 
   function updateMarkdown(next: string) {
     setMarkdown(next);
@@ -56,16 +58,19 @@ export function App() {
           <div className="status-row">
             {result.warning && <span className="status warning">{result.warning}</span>}
             {result.ok ? (
-              <span className="status ok">{result.graph.people.length} people · {result.graph.unions.length} unions · {result.graph.emotionalRelationships.length} emotional links</span>
+              <>
+                <span className="status ok">{result.graph.people.length} people · {result.graph.unions.length} unions · {result.graph.emotionalRelationships.length} emotional links</span>
+                {layout?.warnings.map((warning) => (
+                  <span key={warning.code} className="status warning">{warning.message}</span>
+                ))}
+              </>
             ) : (
               <span className="status error">{result.issues.length} validation issue{result.issues.length === 1 ? "" : "s"}</span>
             )}
           </div>
 
           <div className="canvas-frame">
-            {result.ok ? (
-              <GenogramSvg graph={result.graph} />
-            ) : (
+            {!result.ok ? (
               <div className="empty-state">
                 <h2>Diagram cannot render</h2>
                 <ul>
@@ -77,6 +82,8 @@ export function App() {
                   ))}
                 </ul>
               </div>
+            ) : (
+              layout && <GenogramSvg layout={layout} />
             )}
           </div>
         </section>
@@ -84,4 +91,3 @@ export function App() {
     </main>
   );
 }
-

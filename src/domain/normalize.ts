@@ -22,6 +22,7 @@ export type NormalizedGenogram = {
   emotionalRelationships: GenogramDocument["emotionalRelationships"];
   roles: GenogramDocument["roles"];
   roleAssignments: GenogramDocument["roleAssignments"];
+  layoutHints: GenogramDocument["layoutHints"];
   peopleById: Map<string, NormalizedPerson>;
   unionsById: Map<string, NormalizedUnion>;
 };
@@ -105,6 +106,15 @@ export function normalizeGenogram(doc: GenogramDocument): { graph?: NormalizedGe
     }
   });
 
+  doc.layoutHints.forEach((hint, index) => {
+    if (hint.target.kind === "person" && !peopleById.has(hint.target.id)) {
+      issues.push({ message: `Layout hint targets missing person "${hint.target.id}".`, path: `layoutHints.${index}.target.id` });
+    }
+    if (hint.target.kind === "union" && !unionsById.has(hint.target.id)) {
+      issues.push({ message: `Layout hint targets missing union "${hint.target.id}".`, path: `layoutHints.${index}.target.id` });
+    }
+  });
+
   if (issues.length) return { issues };
 
   return {
@@ -114,6 +124,7 @@ export function normalizeGenogram(doc: GenogramDocument): { graph?: NormalizedGe
       emotionalRelationships: doc.emotionalRelationships,
       roles: doc.roles,
       roleAssignments: doc.roleAssignments,
+      layoutHints: doc.layoutHints,
       peopleById,
       unionsById,
     },

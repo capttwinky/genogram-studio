@@ -103,12 +103,26 @@ const RoleTargetSchema = z.object({
   id: requiredString("target.id"),
 });
 
+export const EntityRefSchema = z.object({
+  kind: z.enum(["person", "union"]),
+  id: requiredString("target.id"),
+});
+
 export const RoleAssignmentSchema = z.object({
   id: requiredString("roleAssignment.id"),
   roleId: requiredString("roleId"),
   target: RoleTargetSchema,
   scope: RoleTargetSchema.optional(),
   confidence: z.enum(["reported", "observed", "inferred", "unknown"]).default("unknown"),
+});
+
+export const LayoutHintSchema = z.object({
+  target: EntityRefSchema,
+  x: z.number().optional(),
+  y: z.number().optional(),
+  pinned: z.boolean().optional(),
+  rank: z.number().int().optional(),
+  lane: z.number().int().optional(),
 });
 
 export const GenogramSchema = z.object({
@@ -118,12 +132,15 @@ export const GenogramSchema = z.object({
   emotionalRelationships: z.array(EmotionalRelationshipSchema).default([]),
   roles: z.array(RoleSchema).default([]),
   roleAssignments: z.array(RoleAssignmentSchema).default([]),
+  layoutHints: z.array(LayoutHintSchema).default([]),
 });
 
 export type GenogramDocument = z.infer<typeof GenogramSchema>;
+export type EntityRef = z.infer<typeof EntityRefSchema>;
 export type Person = z.infer<typeof PersonSchema>;
 export type Union = z.infer<typeof UnionSchema>;
 export type ParentChildLink = z.infer<typeof ParentChildLinkSchema>;
 export type EmotionalRelationship = z.infer<typeof EmotionalRelationshipSchema>;
 export type Role = z.infer<typeof RoleSchema>;
 export type RoleAssignment = z.infer<typeof RoleAssignmentSchema>;
+export type LayoutHint = z.infer<typeof LayoutHintSchema>;
