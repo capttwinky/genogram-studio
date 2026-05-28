@@ -18,6 +18,7 @@ body {
 }
 
 button,
+ a,
 textarea {
   font: inherit;
 }
@@ -64,16 +65,19 @@ textarea {
   gap: 8px;
 }
 
-.toolbar button {
+.toolbar button,
+.toolbar-link {
   border: 1px solid #c9d2dc;
   border-radius: 6px;
   background: #ffffff;
   color: #17202a;
   padding: 8px 11px;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.toolbar button:hover {
+.toolbar button:hover,
+.toolbar-link:hover {
   background: #eef3f7;
 }
 
@@ -360,4 +364,3 @@ textarea {
     border-bottom: 1px solid #dce2e8;
   }
 }
-

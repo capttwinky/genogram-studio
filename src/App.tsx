@@ -5,6 +5,7 @@ import { parseMarkdownGenogram } from "./domain/parse";
 import { sampleMarkdown } from "./sample";
 
 const STORAGE_KEY = "genogram-studio-markdown";
+const MARKUP_REFERENCE_URL = "https://github.com/capttwinky/genogram-studio/blob/main/docs/gstu-markup-reference.md";
 
 function readInitialMarkdown() {
   return localStorage.getItem(STORAGE_KEY) ?? sampleMarkdown;
@@ -33,6 +34,7 @@ export function App() {
           <p>Markdown JSON to interactive family and system diagrams</p>
         </div>
         <div className="toolbar" aria-label="Diagram actions">
+          <a className="toolbar-link" href={MARKUP_REFERENCE_URL} target="_blank" rel="noreferrer">Markup reference</a>
           <button type="button" onClick={() => setEditorOpen((value) => !value)}>{editorOpen ? "Hide editor" : "Show editor"}</button>
           <button type="button" onClick={resetSample}>Reset sample</button>
         </div>
